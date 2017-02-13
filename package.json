@@ -1,6 +1,6 @@
 {
   "name": "page-loader-vu",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Loads web page with its assets",
   "bin": {
     "page-loader": "dist/bin/page-loader.js"

@@ -1,20 +1,29 @@
+import fs from 'fs';
+import path from 'path';
 import nock from 'nock';
 import loader from '../src';
 
-const base = 'https://hexlet.io';
-const path = '/courses';
+
+const host = 'https://hexlet.io';
+const pathname = '/courses';
+const body = '<html></html>';
+const tmpDirPrefix = `/tmp/hex${path.sep}`;
 
 beforeAll(() => {
-  nock(base)
-    .get(path)
-    .reply(200, '<html></html>');
+  nock(host)
+    .get(pathname)
+    .reply(200, body);
 });
 
-const checkResult = (err) => {
-  console.log('saved');
-  console.log(err);
-};
+it('should get page content and save it to file', (done) => {
+  const tmpPath = fs.mkdtempSync(tmpDirPrefix);
 
-it('should return get site content and save file', () => {
-  loader(`${base}${path}`, '/tmp', checkResult);
+  const checkResult = () => {
+    const resultContent = fs.readFileSync(path.resolve(tmpPath, 'hexlet-io-courses.html'), 'utf8');
+    expect(resultContent).toEqual(body);
+    // TODO: remove temp directories
+    done();
+  };
+
+  loader(`${host}${pathname}`, tmpPath, checkResult);
 });
