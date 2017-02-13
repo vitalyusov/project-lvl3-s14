@@ -1,0 +1,43 @@
+{
+  "name": "page-loader-vu",
+  "version": "0.1.0",
+  "description": "Loads web page with its assets",
+  "bin": {
+    "page-loader": "dist/bin/page-loader.js"
+  },
+  "main": "dist/index.js",
+  "author": "Vitaly Usov",
+  "license": "MIT",
+  "scripts": {
+    "babel-node": "babel-node",
+    "eslint": "eslint",
+    "page-loader": "npm run babel-node -- src/bin/page-loader.js --",
+    "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
+    "prepublish": "npm run build",
+    "test": "jest"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/__fixtures__/"
+    ]
+  },
+  "dependencies": {
+    "commander": "*"
+  },
+  "devDependencies": {
+    "babel-cli": "*",
+    "babel-core": "*",
+    "babel-eslint": "*",
+    "babel-preset-env": "*",
+    "babel-preset-stage-0": "*",
+    "eslint": "*",
+    "eslint-config-airbnb": "*",
+    "eslint-config-airbnb-base": "*",
+    "eslint-plugin-import": "*",
+    "jest": "*",
+    "babel-jest": "*",
+    "babel-polyfill": "*"
+
+  }
+}
