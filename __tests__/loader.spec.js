@@ -10,11 +10,11 @@ beforeAll(() => {
     .reply(200, '<html></html>');
 });
 
-const cb = (err) => {
+const checkResult = (err) => {
   console.log('saved');
   console.log(err);
 };
 
 it('should return get site content and save file', () => {
-  loader(`${base}${path}`, '/tmp', cb);
+  loader(`${base}${path}`, '/tmp', checkResult);
 });
