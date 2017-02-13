@@ -23,7 +23,8 @@
     ]
   },
   "dependencies": {
-    "commander": "*"
+    "commander": "*",
+    "axios": "*"
   },
   "devDependencies": {
     "babel-cli": "*",
@@ -37,7 +38,8 @@
     "eslint-plugin-import": "*",
     "jest": "*",
     "babel-jest": "*",
-    "babel-polyfill": "*"
+    "babel-polyfill": "*",
+    "nock": "*"
 
   }
 }
