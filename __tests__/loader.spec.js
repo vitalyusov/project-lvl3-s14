@@ -11,7 +11,7 @@ const pathname = '/courses';
 const tmpDirPrefix = `${os.tmpdir()}/hex${path.sep}`;
 const expectedContent = fs.readFileSync('__tests__/__fixtures__/hexlet-io-courses.html', 'utf8');
 
-beforeAll(() => {
+beforeEach(() => {
   nock(host)
     .get(pathname)
     .reply(200, expectedContent);
@@ -32,10 +32,14 @@ it('should get page content and save it to file', (done) => {
   });
 });
 
-/*
+
 it('should download page with all assets', (done) => {
   const tmpPath = fs.mkdtempSync(tmpDirPrefix);
-  loader(`${host}${pathname}`, tmpPath).then(() => {
+  return loader(`${host}${pathname}`, tmpPath).then(() => {
+    expect(fs.existsSync(`${tmpPath}/hexlet-io-courses_files/cdn2-hexlet-io-assets-application-f7ef9ab40200773689e703b1cc34e56ab0ad811a10a652f9b9d4e5dacc71f43a.css`)).toBeTruthy();
+    done();
+  }).catch((err) => {
+    console.log(err);
+    done();
   });
 });
-*/
