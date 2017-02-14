@@ -3,8 +3,6 @@ node_js:
   - stable
 
 before_script: mkdir /tmp/hex
-before_script: echo $HOME
 after_script: rm -rf /tmp/hex
-script: echo $HOME
 script: make lint
 script: make test
