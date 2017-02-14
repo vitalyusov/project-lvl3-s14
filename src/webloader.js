@@ -20,7 +20,7 @@ export default (uri, dir = '.') => {
   const base = url.format({ protocol: parsedUrl.protocol, host: parsedUrl.host });
   const filename = genName(`${parsedUrl.hostname}${parsedUrl.pathname}`);
 
-  const ax = axios({ baseURL: base });
-  return ax.get(parsedUrl.pathname)
+  return axios({ baseURL: base })
+    .get(parsedUrl.pathname)
     .then(result => promiseWrite(path.resolve(dir, filename), result.data));
 };
