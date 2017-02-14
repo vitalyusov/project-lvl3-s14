@@ -11,6 +11,6 @@ program
   .action((url, options) =>
     load(url, options.output)
       .then(() => console.log('Successfully downloaded'))
-      .catch(err => console.log(`Failed to save page\n${err}`)),
+      .catch(err => console.log(`Failed to save page\n${err}`))
   )
   .parse(process.argv);
