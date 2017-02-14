@@ -24,7 +24,8 @@
   },
   "dependencies": {
     "commander": "*",
-    "axios": "*"
+    "axios": "*",
+    "cheerio": "*"
   },
   "devDependencies": {
     "babel-cli": "*",

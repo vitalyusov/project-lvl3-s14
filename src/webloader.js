@@ -4,7 +4,7 @@ import path from 'path';
 import url from 'url';
 import axios from './lib/axios';
 
-const genName = u => u.replace(/[^a-zA-Z-]/g, '-').toLowerCase().concat('.html');
+const genName = u => u.replace(/[^0-9a-zA-Z-]/g, '-').toLowerCase().concat('.html');
 
 const promiseWrite = (filename, data) => new Promise((resolve, reject) => {
   try {

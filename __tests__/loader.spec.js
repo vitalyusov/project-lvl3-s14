@@ -7,13 +7,14 @@ import loader from '../src';
 
 const host = 'https://hexlet.io';
 const pathname = '/courses';
-const body = '<html></html>';
+
 const tmpDirPrefix = `${os.tmpdir()}/hex${path.sep}`;
+const expectedContent = fs.readFileSync('__tests__/__fixtures__/hexlet-io-courses.html', 'utf8');
 
 beforeAll(() => {
   nock(host)
     .get(pathname)
-    .reply(200, body);
+    .reply(200, expectedContent);
 });
 
 it('should get page content and save it to file', (done) => {
@@ -22,7 +23,7 @@ it('should get page content and save it to file', (done) => {
 
   loader(`${host}${pathname}`, tmpPath).then(() => {
     const resultContent = fs.readFileSync(path.resolve(tmpPath, 'hexlet-io-courses.html'), 'utf8');
-    expect(resultContent).toEqual(body);
+    expect(resultContent).toEqual(expectedContent);
     done();
   })
   .catch((err) => {
@@ -30,3 +31,11 @@ it('should get page content and save it to file', (done) => {
     done();
   });
 });
+
+/*
+it('should download page with all assets', (done) => {
+  const tmpPath = fs.mkdtempSync(tmpDirPrefix);
+  loader(`${host}${pathname}`, tmpPath).then(() => {
+  });
+});
+*/
