@@ -15,15 +15,13 @@ beforeAll(() => {
     .reply(200, body);
 });
 
-it('should get page content and save it to file', (done) => {
+it('should get page content and save it to file', () => {
   const tmpPath = fs.mkdtempSync(tmpDirPrefix);
+  // TODO: remove temp directories
 
-  const checkResult = () => {
+  loader(`${host}${pathname}`, tmpPath).then(() => {
     const resultContent = fs.readFileSync(path.resolve(tmpPath, 'hexlet-io-courses.html'), 'utf8');
     expect(resultContent).toEqual(body);
-    // TODO: remove temp directories
-    done();
-  };
-
-  loader(`${host}${pathname}`, tmpPath, checkResult);
+  })
+  .catch(err => console.log(`Error while saving page\n${err}`));
 });

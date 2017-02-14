@@ -1,36 +1,26 @@
-import axios from 'axios';
-import http from 'axios/lib/adapters/http';
+import fs from 'fs';
+
 import path from 'path';
 import url from 'url';
-import write from './fswriter';
-
+import axios from './lib/axios';
 
 const genName = u => u.replace(/[^a-zA-Z-]/g, '-').toLowerCase().concat('.html');
 
-const defaultCB = (err) => {
-  if (err) {
-    console.log(`Something went wrong\n${err}`);
-    return;
+const promiseWrite = (filename, data) => new Promise((resolve, reject) => {
+  try {
+    fs.writeFileSync(filename, data);
+    resolve();
+  } catch (err) {
+    reject(err);
   }
-  console.log('Successfully downloaded');
-};
+});
 
-export default (uri, dir = '.', cb = defaultCB) => {
+export default (uri, dir = '.') => {
   const parsedUrl = url.parse(uri);
   const base = url.format({ protocol: parsedUrl.protocol, host: parsedUrl.host });
   const filename = genName(`${parsedUrl.hostname}${parsedUrl.pathname}`);
 
-  const ax = axios.create({ baseURL: base });
-  ax.defaults.adapter = http;
-
-  ax.get(parsedUrl.pathname)
-  .then((result) => {
-    try {
-      write(path.resolve(dir, filename), result.data);
-      cb();
-    } catch (e) {
-      cb(e);
-    }
-  })
-  .catch(e => cb(e));
+  const ax = axios({ baseURL: base });
+  return ax.get(parsedUrl.pathname)
+    .then(result => promiseWrite(path.resolve(dir, filename), result.data));
 };
