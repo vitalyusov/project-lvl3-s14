@@ -1,4 +1,5 @@
 import cheerio from 'cheerio';
+import axios from './lib/axios';
 
 export default (dir = '.', data) => {
   const $ = cheerio.load(data);
@@ -7,10 +8,15 @@ export default (dir = '.', data) => {
   const imgs = $('img');
   const items = [...links, ...scripts, ...imgs];
   //console.log(links[2].attribs.href);
-  console.log(scripts[0].attribs.src);
+
+  console.log(links[0].attribs.href);
   //console.log(imgs);
   //console.log([...links, ...scripts, ...imgs]);
-  return new Promise((resolve, reject) => {
-    resolve(data);
+  return axios({ responseType: 'arraybuffer' }).get(links[0].attribs.href).then((result) => {
+    //console.log(result.data.toString('utf8'));
+    return new Promise((resolve, reject) => {
+      resolve(data);
+    })
   });
+
 };
