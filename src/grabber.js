@@ -1,5 +1,19 @@
 import cheerio from 'cheerio';
 import axios from './lib/axios';
+import fs from 'fs';
+import { promiseWrite, genName } from './utils';
+
+
+const download = (item, dir) => {
+  const ref = item.attribs.href || item.attribs.src;
+
+  return axios({ responseType: 'arraybuffer' }).get(ref)
+    .then((result) => {
+      const filename = `${dir}/${genName(ref)}`;
+      console.log(filename);
+      return promiseWrite(filename, result.data);
+    });
+};
 
 export default (dir = '.', data) => {
   const $ = cheerio.load(data);
@@ -7,16 +21,8 @@ export default (dir = '.', data) => {
   const scripts = $('script').filter((i, el) => $(el).attr('src'));
   const imgs = $('img');
   const items = [...links, ...scripts, ...imgs];
-  //console.log(links[2].attribs.href);
+  fs.mkdirSync(dir);
 
-  console.log(links[0].attribs.href);
-  //console.log(imgs);
-  //console.log([...links, ...scripts, ...imgs]);
-  return axios({ responseType: 'arraybuffer' }).get(links[0].attribs.href).then((result) => {
-    //console.log(result.data.toString('utf8'));
-    return new Promise((resolve, reject) => {
-      resolve(data);
-    })
-  });
-
+  return Promise.all(items.map(i => download(i, dir)))
+    .then(() => new Promise((resolve, reject) => resolve(data)));
 };

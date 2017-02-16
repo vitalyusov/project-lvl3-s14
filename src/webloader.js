@@ -1,30 +1,15 @@
-import fs from 'fs';
+// import fs from 'fs';
 
 import path from 'path';
-import url from 'url';
 import axios from './lib/axios';
 import grab from './grabber';
-
-const genName = u => u.replace(/[^0-9a-zA-Z-]/g, '-').toLowerCase().concat('.html');
-
-const promiseWrite = (filename, data) => new Promise((resolve, reject) => {
-  try {
-    fs.writeFileSync(filename, data);
-    resolve(data);
-  } catch (err) {
-    reject(err);
-  }
-});
+import { promiseWrite, genName } from './utils';
 
 export default (uri, dir = '.') => {
-  const parsedUrl = url.parse(uri);
-  const base = url.format({ protocol: parsedUrl.protocol, host: parsedUrl.host });
-  const filename = genName(`${parsedUrl.hostname}${parsedUrl.pathname}`);
-  const outputFile = path.resolve(dir, filename);
+  const filename = genName(uri);
+  const outputFile = path.resolve(dir, `${filename}.html`);
 
-  return axios({ baseURL: base, responseType: 'arraybuffer' })
-    .get(parsedUrl.pathname)
-    .then(result => grab(dir, result.data))
+  return axios({ responseType: 'arraybuffer' }).get(uri)
+    .then(result => grab(`${dir}/${filename}_files`, result.data))
     .then(result => promiseWrite(outputFile, result));
-
 };
