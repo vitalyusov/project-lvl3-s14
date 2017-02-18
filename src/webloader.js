@@ -10,6 +10,6 @@ export default (uri, dir = '.') => {
   const outputFile = path.resolve(dir, `${filename}.html`);
 
   return axios({ responseType: 'arraybuffer' }).get(uri)
-    .then(result => grab(`${dir}/${filename}_files`, result.data))
+    .then(result => grab(filename, dir, result.data))
     .then(result => promiseWrite(outputFile, result));
 };
